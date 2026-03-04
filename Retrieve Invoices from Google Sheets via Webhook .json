@@ -26,14 +26,14 @@
           "value": "1A6WjOlTAbMtZiVxx5nKJCq9XvZuwKuwXocX3DqB4uRI",
           "mode": "list",
           "cachedResultName": "n8n_project_data_storage",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1A6WjOlTAbMtZiVxx5nKJCq9XvZuwKuwXocX3DqB4uRI/edit?usp=drivesdk"
+          "cachedResultUrl": "Sheet link"
         },
         "sheetName": {
           "__rl": true,
           "value": "gid=0",
           "mode": "list",
           "cachedResultName": "Sheet1",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1A6WjOlTAbMtZiVxx5nKJCq9XvZuwKuwXocX3DqB4uRI/edit#gid=0"
+          "cachedResultUrl": "Sheet link"
         },
         "options": {}
       },
@@ -47,7 +47,7 @@
       ],
       "credentials": {
         "googleSheetsOAuth2Api": {
-          "id": "CSNzAKMseG3dbJ5t",
+          "id": "API ID",
           "name": "Google Sheets account"
         }
       }
