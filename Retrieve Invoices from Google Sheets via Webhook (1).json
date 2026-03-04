@@ -1,0 +1,105 @@
+{
+  "name": "Retrieve Invoices from Google Sheets via Webhook",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "get-invoices",
+        "responseMode": "responseNode",
+        "options": {
+          "allowedOrigins": "*"
+        }
+      },
+      "id": "2977f88f-3162-4729-9a3a-63eb298a262f",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "webhookId": "968a007d-8e7e-4925-b0f5-42c4f85b49e2"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1A6WjOlTAbMtZiVxx5nKJCq9XvZuwKuwXocX3DqB4uRI",
+          "mode": "list",
+          "cachedResultName": "n8n_project_data_storage",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1A6WjOlTAbMtZiVxx5nKJCq9XvZuwKuwXocX3DqB4uRI/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1A6WjOlTAbMtZiVxx5nKJCq9XvZuwKuwXocX3DqB4uRI/edit#gid=0"
+        },
+        "options": {}
+      },
+      "id": "810576d8-18c0-47a0-b6f1-b63312442764",
+      "name": "Google Sheets",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        224,
+        0
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "CSNzAKMseG3dbJ5t",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "options": {}
+      },
+      "id": "7cb0b900-3f61-42c4-aeb9-64eb66af6c25",
+      "name": "Respond to Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        448,
+        0
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "5f9c7922-40f5-4172-a0c1-39f48bb434b1",
+  "meta": {
+    "instanceId": "dbeaa36dcedf5ffd15d17d79b329b104e3b778a7c360b92d43c1f62cc91a354d"
+  },
+  "id": "GSBTymE0hXWXsk4E",
+  "tags": []
+}

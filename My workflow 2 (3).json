@@ -1,0 +1,330 @@
+{
+  "name": "My workflow 2",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        416,
+        160
+      ],
+      "id": "5f26c38a-0a27-405f-99af-399a5e3c6a8b",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "fileSelector": "C:/Users/Srinivasan/Desktop/n8n_proj/invoice1.pdf",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1,
+      "position": [
+        768,
+        160
+      ],
+      "id": "dc37ae0f-1533-4fd4-9a1d-a32a22e0d602",
+      "name": "Read/Write Files from Disk"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.ocr.space/parse/image",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "ApiKey",
+              "value": "K81061794788957"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "parameterType": "formBinaryData",
+              "name": "File",
+              "inputDataFieldName": "data"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1248,
+        160
+      ],
+      "id": "1911a1f8-9892-40db-b730-2ec77e13a61b",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Extract the following fields from this invoice: invoice number, date, vendor name, total, tax, and items. For each item: return item name and item amount as item_name and item_amount respectively. Return clean JSON.{{ $json.cleanedText }}\nIf any errors, output ERROR",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        1664,
+        160
+      ],
+      "id": "3454d7b4-f032-4f48-abb0-5790221ecdda",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        1632,
+        368
+      ],
+      "id": "f6564753-abb9-4f0f-9da9-7e11509ddf4c",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "eB4wVZ4qDuB9y4W3",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const raw = $json[\"ParsedResults\"][0][\"ParsedText\"];\n\nconst cleaned = raw\n  .replace(/\\r|\\n/g, \" \")       // flatten newlines\n  .replace(/\\s+/g, \" \")         // collapse spaces\n  .replace(/[^\\x00-\\x7F]/g, \"\") // strip weird characters\n  .replace(/\\s([.,:;!?])/g, \"$1\") // tidy punctuation spacing\n  .trim();\n\nreturn { json: { cleanedText: cleaned } };\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1456,
+        160
+      ],
+      "id": "af690667-2d1a-48a7-94a2-dd6353865599",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/1A6WjOlTAbMtZiVxx5nKJCq9XvZuwKuwXocX3DqB4uRI/edit?usp=sharing",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1A6WjOlTAbMtZiVxx5nKJCq9XvZuwKuwXocX3DqB4uRI/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Invoice Number": "={{ $json.invoice_number }}",
+            "Date": "={{ $json.date }}",
+            "Vendor": "={{ $json.vendor_name }}",
+            "Total": "={{ $json.total }}",
+            "Tax": "={{ $json.tax }}",
+            "Items (desc|amt)": "={{ $json.items_flat }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Invoice Number",
+              "displayName": "Invoice Number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Date",
+              "displayName": "Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Vendor",
+              "displayName": "Vendor",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Total",
+              "displayName": "Total",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Tax",
+              "displayName": "Tax",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Items (desc|amt)",
+              "displayName": "Items (desc|amt)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Raw JSON",
+              "displayName": "Raw JSON",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {
+          "useAppend": true
+        }
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        2496,
+        240
+      ],
+      "id": "336d5f1a-e93a-4706-b7dd-ad0ff4134ec9",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "sJtYrCJl1tJ8VlTB",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// n8n Function node: parse JSON-looking string and produce clean fields for Sheets\nconst out = [];\n\nfor (const item of items) {\n  // the AI node put the JSON inside item.json.output (as a string)\n  const raw = item.json.output || item.json;\n\n  // clean code fences and accidental leading text\n  let txt = typeof raw === 'string' ? raw.replace(/```json|```/g, '').trim() : raw;\n\n  // sometimes your JSON has a stray \"json\\n\" prefix — strip that\n  txt = (typeof txt === 'string') ? txt.replace(/^json\\s*/, '') : txt;\n\n  let invoice;\n  if (typeof txt === 'string') {\n    try {\n      const firstBrace = txt.indexOf('{');\n      invoice = JSON.parse(firstBrace >= 0 ? txt.slice(firstBrace) : txt);\n    } catch (e) {\n      // fallback: empty safe object so workflow doesn't explode\n      invoice = {};\n    }\n  } else {\n    invoice = txt;\n  }\n\n  // normalize date to YYYY-MM-DD if possible\n  let normDate = invoice.date || '';\n  try {\n    const d = new Date(invoice.date);\n    if (!isNaN(d)) {\n      const yyyy = d.getFullYear();\n      const mm = String(d.getMonth() + 1).padStart(2, '0');\n      const dd = String(d.getDate()).padStart(2, '0');\n      normDate = `${yyyy}-${mm}-${dd}`;\n    }\n  } catch (e) {}\n\n  // flatten items array\n  const itemsArr = Array.isArray(invoice.items) ? invoice.items : [];\n  const items_flat = itemsArr.map(it => `${(it.item_name||'').replace(/\\r?\\n|\\|/g,' ')} (${it.item_amount ?? ''})`).join(' ; ');\n\n  out.push({\n    json: {\n      invoice_number: invoice.invoice_number || '',\n      date: normDate,\n      vendor_name: invoice.vendor_name || '',\n      total: invoice.total ?? '',\n      tax: invoice.tax ?? '',\n      items_flat,\n      raw_json: JSON.stringify(invoice)\n    }\n  });\n}\n\nreturn out;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2016,
+        160
+      ],
+      "id": "15ddea39-e694-4202-bbd0-8bb6c4e60a0e",
+      "name": "Code1"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Read/Write Files from Disk",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read/Write Files from Disk": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Code1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code1": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "5d4d81f7-3714-445e-ac68-0c91c9bde04f",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "adefd400ee536ff96b65fb736f8642272c3066a018fb0446107741f9c51bf934"
+  },
+  "id": "ZqhlP99uFKR9xRtx",
+  "tags": []
+}
