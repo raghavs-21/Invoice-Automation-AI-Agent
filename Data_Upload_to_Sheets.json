@@ -14,7 +14,7 @@
     },
     {
       "parameters": {
-        "fileSelector": "C:/Users/Srinivasan/Desktop/n8n_proj/invoice1.pdf",
+        "fileSelector": "Filename.pdf",
         "options": {}
       },
       "type": "n8n-nodes-base.readWriteFile",
@@ -29,13 +29,13 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "https://api.ocr.space/parse/image",
+        "url": "API_url",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
             {
               "name": "ApiKey",
-              "value": "K81061794788957"
+              "value": "Key"
             }
           ]
         },
@@ -86,11 +86,11 @@
         1632,
         368
       ],
-      "id": "f6564753-abb9-4f0f-9da9-7e11509ddf4c",
+      "id": "gemini",
       "name": "Google Gemini Chat Model",
       "credentials": {
         "googlePalmApi": {
-          "id": "eB4wVZ4qDuB9y4W3",
+          "id": "gemini",
           "name": "Google Gemini(PaLM) Api account"
         }
       }
@@ -113,7 +113,7 @@
         "operation": "append",
         "documentId": {
           "__rl": true,
-          "value": "https://docs.google.com/spreadsheets/d/1A6WjOlTAbMtZiVxx5nKJCq9XvZuwKuwXocX3DqB4uRI/edit?usp=sharing",
+          "value": "sheet_url",
           "mode": "url"
         },
         "sheetName": {
@@ -121,7 +121,7 @@
           "value": "gid=0",
           "mode": "list",
           "cachedResultName": "Sheet1",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1A6WjOlTAbMtZiVxx5nKJCq9XvZuwKuwXocX3DqB4uRI/edit#gid=0"
+          "cachedResultUrl": "sheet_url"
         },
         "columns": {
           "mappingMode": "defineBelow",
@@ -217,7 +217,7 @@
       "name": "Append row in sheet",
       "credentials": {
         "googleSheetsOAuth2Api": {
-          "id": "sJtYrCJl1tJ8VlTB",
+          "id": "API",
           "name": "Google Sheets account"
         }
       }
