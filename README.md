@@ -19,5 +19,17 @@ Serves as the persistent data store for all processed invoice information.
 * **Interface:** Google AI Studio
 * **Logic:** JSON Parsing, OCR Data Extraction, Data Processing and Storage
 * **Database:** Google Sheets API
+
+## Screenshots: 
+* **App Dashboard(Google AI Studio)**
+  ![plot](/screenshots/Dashboard.png)
+* **App - Invoice List**
+  ![plot](/screenshots/Invoice_list.png)
+* **App - Upload Invoice**
+  ![plot](/screenshots/Upload_invoice.png)
+* **n8n Workflow**
+  ![plot](/screenshots/Workflow.png)
+* **Database - Google Sheets (with sample data)**
+  ![plot](/screenshots/Database(GSheets).png)
 ## NOTE : 
 Original dataflow files have been lost, the files uploaded here are older versions.
