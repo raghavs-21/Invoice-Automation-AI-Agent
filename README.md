@@ -19,4 +19,6 @@ Serves as the persistent data store for all processed invoice information.
 * **Interface:** Google AI Studio
 * **Logic:** JSON Parsing, OCR Data Extraction, Data Processing and Storage
 * **Database:** Google Sheets API
-NOTE : Original dataflow files have been lost, the files uploaded here are older versions.
+*
+## NOTE : 
+Original dataflow files have been lost, the files uploaded here are older versions.
